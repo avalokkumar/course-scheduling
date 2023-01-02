@@ -1,0 +1,98 @@
+Add course offering
+	 A course offering has course title, instructor and date.
+	 It should also contain a minimum & maximum number of employees for the course offering.
+
+//TODO: Get Both Input and Output of course offering for next action
+//TODO: Map both input and out corresponding to offering_id
+
+Register for the course
+  	Employees can register for the courses.
+
+ 		-	The combination of email-id and course-offering-id in the input should be unique
+ 		-	The format of course-registration-id is REG-COURSE-<EMPLOYEE-NAME>-<COURSE-NAME>
+ 		-	If number of employees has not exceeded the maximum number of employees allowed for the course offering, status will be ACCEPTED
+ 		-	If number of employees has exceeded the maximum number of employees allowed for the course offering, status will be COURSE_FULL_ERROR
+ 		-	If the minimum number of employees for the course offering is not reached before the course date, the status of the course offering would be COURSE_CANCELED
+ 		-	Course-registration-id will only be returned if the status is ACCEPTED
+
+//TODO: Get Course offering detail from mapping created in first action
+//TODO: Get Employee name from input email and course title from course offering detail
+//TODO: validate max allowed employee for the course
+//TODO: validate min employee for the given course offering date
+//TODO: generate and return course-registration-id and status
+//TODO: Validate the min registration received with min employee in offering detail for the given offering date
+
+//TODO: Maintain a new Map with OfferingId and  values as status & isAlloted[boolean] & List(Registration Number, Employee Name, Email, Course Offering ID, Course Name, Instructor, Date, Final Status)
+		- offeringMap
+//TODO: Maintain a new Map of registrationId as key with offeringId value
+
+Cancel registration [registrationId]
+ 	Employees can cancel their registration until the course allotment is completed.
+ 	//Remove the mapping from offeringMap if isAlloted is false for the given registrationId and offeringId - Print
+
+Course allotment -
+//TODO: Print all the values from offeringMap where status is CONFIRMED
+	 -	This feature allots employees to course offering, before the course offering date.
+	 -	It should print a list of all the employees with their details along with their final course allotment status
+	 (Registration Number, Employee Name, Email, Course Offering ID, Course Name, Instructor, Date, Final Status).
+	 The list should be sorted based on the Registration number.
+
+	 -	If sufficient registrations are not received then the course offering itself gets cancelled.
+	 -	The employees who have registered will get confirmed unless the minimum number of registrations is not received.
+	 -	Even if the course offering gets canceled due to the minimum number of employees not registered, the list should be printed.
+
+
+Map<Command, Service>
+
+CourseOfferingServiceImpl implements CourseOfferingService
+
+RegistrationServiceImpl implements RegistrationService
+
+CancellationServiceImpl implements CancellationService
+
+CourseAllotmentServiceImpl implements CourseAllotmentService
+
+********************************************************************************************************************************************
+********************************************************************************************************************************************
+********************************************************************************************************************************************
+********************************************************************************************************************************************
+
+Add Course Offering
+
+ADD-COURSE-OFFERING
+o/p - Course offering Id --- Add to the list
+
+Ex: OFFERING-JAVA-JAMES
+
+Store - Map<OfferingId, CourseRegistrationDetail> offeringMapping; | CourseRegistrationDetail should have - all inputs property from offering + registrationId
+
+REGISTER	-	uses course offering id list
+input - ANDY@GMAIL.COM OFFERING-JAVA-JAMES
+
+//TODO
+- Capture Course title from offering - Use offeringMapping
+- capture username from email
+- validate the offering min and max employee - Use offeringMapping
+
+o/p - 	REG-COURSE-ANDY-JAVA ACCEPTED - Add the output to offeringMapping -> CourseDetail
+
+- Maintain a Map<RegistrationId, RegistrationDetail> registrationMapping --	// RegistrationDetail -> email + offeringId + registrationStatus + isAlloted(boolean)
+- Update registrationId in CourseRegistrationDetail in offeringMapping
+
+Ex:
+ALOT
+ALLOT OFFERING-JAVA-JAMES
+
+//TODO: Get the Course Registration detail based on the offering id
+//TODO: Get RegistrationDetails from registrationMapping by using RegistrationId in CourseRegistrationDetail
+//TODO: Sort the result based on Registration Id
+
+output: 	REG-COURSE-ANDY-JAVA ANDY@GMAIL.COM OFFERING-JAVA-JAMES JAVA JAMES 15062022
+
+
+
+CANCEL
+input - <course-registration-id>
+remove the registration if not alloted
+
+Remove registration from registrationMapping if for the given registration, isAlloted is false
